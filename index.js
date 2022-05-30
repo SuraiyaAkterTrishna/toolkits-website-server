@@ -24,6 +24,7 @@ async function run() {
     await client.connect();
     const productCollection = client.db("tooltips").collection("products");
     const orderCollection = client.db("tooltips").collection("orders");
+    const userCollection = client.db("tooltips").collection("users");
     // insert product in database
     app.post("/product", async (req, res) => {
       const product = req.body;
@@ -109,6 +110,13 @@ async function run() {
       const result = await paymentCollection.insertOne(payment);
       const updatedOrder = await orderCollection.updateOne(filter, updatedDoc);
       res.send(updatedOrder);
+    });
+    // Get user from database
+    app.get("/user", async (req, res) => {
+      const query = {};
+      const cursor = userCollection.find(query);
+      const users = await cursor.toArray();
+      res.send(users);
     });
   } finally {
   }
