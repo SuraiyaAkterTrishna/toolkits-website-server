@@ -36,6 +36,13 @@ async function run() {
       const products = await cursor.toArray();
       res.send(products);
     });
+    // Get single product from database
+    app.get("/product/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const result = await productCollection.findOne(query);
+      res.send(result);
+    });
   } finally {
   }
 }
