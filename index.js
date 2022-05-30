@@ -23,6 +23,7 @@ async function run() {
   try {
     await client.connect();
     const productCollection = client.db("tooltips").collection("products");
+    const orderCollection = client.db("tooltips").collection("orders");
     // insert product in database
     app.post("/product", async (req, res) => {
       const product = req.body;
@@ -65,6 +66,14 @@ async function run() {
         options
       );
       res.send(result);
+    });
+    // Get logged user order
+    app.get("/my-order", async (req, res) => {
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = orderCollection.find(query);
+      const items = await cursor.toArray();
+      res.send(items);
     });
   } finally {
   }
