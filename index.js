@@ -41,6 +41,7 @@ async function run() {
     const orderCollection = client.db("tooltips").collection("orders");
     const userCollection = client.db("tooltips").collection("users");
     const paymentCollection = client.db("tooltips").collection("payments");
+    const reviewCollection = client.db("tooltips").collection("reviews");
     // insert product in database
     app.post("/product", async (req, res) => {
       const product = req.body;
@@ -205,11 +206,18 @@ async function run() {
       });
       res.send({ clientSecret: paymentIntent.client_secret });
     });
-    // create a review
+    // create a review from client
     app.post("/review", async (req, res) => {
       const testimonial = req.body;
       const result = await reviewCollection.insertOne(testimonial);
       res.send(result);
+    });
+    // get user review from database
+    app.get("/review", async (req, res) => {
+      const query = {};
+      const cursor = reviewCollection.find(query);
+      const review = await cursor.toArray();
+      res.send(review);
     });
   } finally {
   }
@@ -217,9 +225,9 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Hello From Toolkits Server!");
+  res.send("Hello From Toolkits Server By Suraiya Akter Trishna!");
 });
 
 app.listen(port, () => {
-  console.log(`Toolkits App listening on port ${port}`);
+  console.log(`Toolkits App listening on port ${port} Create by Suraiya Akter Trishna`);
 });
