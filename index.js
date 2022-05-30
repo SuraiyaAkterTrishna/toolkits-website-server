@@ -75,6 +75,13 @@ async function run() {
       const items = await cursor.toArray();
       res.send(items);
     });
+    // Get single order by id
+    app.get("/my-order/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: ObjectId(id) };
+      const order = await orderCollection.findOne(query);
+      res.send(order);
+    });
   } finally {
   }
 }
