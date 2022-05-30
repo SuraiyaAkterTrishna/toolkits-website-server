@@ -82,6 +82,12 @@ async function run() {
       const order = await orderCollection.findOne(query);
       res.send(order);
     });
+    // create order from client
+    app.post("/order", async (req, res) => {
+      const order = req.body;
+      const result = await orderCollection.insertOne(order);
+      res.send(result);
+    });
   } finally {
   }
 }
