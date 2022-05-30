@@ -23,11 +23,18 @@ async function run() {
   try {
     await client.connect();
     const productCollection = client.db("tooltips").collection("products");
-    // Get product from database
+    // insert product in database
     app.post("/product", async (req, res) => {
       const product = req.body;
       const result = await productCollection.insertOne(product);
       res.send(result);
+    });
+    // Get product from database
+    app.get("/product", async (req, res) => {
+      const query = {};
+      const cursor = productCollection.find(query);
+      const products = await cursor.toArray();
+      res.send(products);
     });
   } finally {
   }
