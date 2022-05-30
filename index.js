@@ -40,6 +40,7 @@ async function run() {
     const productCollection = client.db("tooltips").collection("products");
     const orderCollection = client.db("tooltips").collection("orders");
     const userCollection = client.db("tooltips").collection("users");
+    const paymentCollection = client.db("tooltips").collection("payments");
     // insert product in database
     app.post("/product", async (req, res) => {
       const product = req.body;
@@ -191,6 +192,18 @@ async function run() {
       const user = await userCollection.findOne({ email: email });
       const isAdmin = user?.role === "admin";
       res.send({ admin: isAdmin });
+    });
+    // Get client secret from backend via payment intent post api
+    app.post("/create-payment-intent", async (req, res) => {
+      const order = req.body;
+      const price = order.price;
+      const amount = price * 100;
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ["card"],
+      });
+      res.send({ clientSecret: paymentIntent.client_secret });
     });
   } finally {
   }
