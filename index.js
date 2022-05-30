@@ -205,6 +205,12 @@ async function run() {
       });
       res.send({ clientSecret: paymentIntent.client_secret });
     });
+    // create a review
+    app.post("/review", async (req, res) => {
+      const testimonial = req.body;
+      const result = await reviewCollection.insertOne(testimonial);
+      res.send(result);
+    });
   } finally {
   }
 }
