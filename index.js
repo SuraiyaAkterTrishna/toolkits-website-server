@@ -42,6 +42,7 @@ async function run() {
     const userCollection = client.db("tooltips").collection("users");
     const paymentCollection = client.db("tooltips").collection("payments");
     const reviewCollection = client.db("tooltips").collection("reviews");
+    const projectCollection = client.db("tooltips").collection("projects");
     // insert product in database
     app.post("/product", async (req, res) => {
       const product = req.body;
@@ -54,6 +55,13 @@ async function run() {
       const cursor = productCollection.find(query);
       const products = await cursor.toArray();
       res.send(products);
+    });
+    // Get project from database
+    app.get("/project", async (req, res) => {
+      const query = {};
+      const cursor = projectCollection.find(query);
+      const projects = await cursor.toArray();
+      res.send(projects);
     });
     // Get single product from database
     app.get("/product/:id", async (req, res) => {
